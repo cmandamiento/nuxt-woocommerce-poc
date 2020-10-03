@@ -1,24 +1,26 @@
 <template>
   <div class="container">
-    <h2>Products</h2>
+    <h2>{{ product.title }}</h2>
     <hr />
-    <div v-for="product in products" :key="product.id" class="product">
-      {{ product.name }}
-      <br />
-      Price: {{ product.regular_price }}
-      <nuxt-link :to="'/products/' + product.id">view detail</nuxt-link>
-    </div>
+
+    <div v-html="product.description"></div>
+    Price: <s>S/.{{ product.regular_price }}</s>
+    <br />
+    <strong>S/. {{ product.price }}</strong>
+    <br />
+    <br />
+    <div v-html="product.price_html"></div>
   </div>
 </template>
 
 <script>
 export default {
-  async asyncData({ $api }) {
-    const products = await $api.$get(
-      `https://food.legacyrules.com/wp-json/wc/v3/products`
+  async asyncData({ $api, params }) {
+    const product = await $api.$get(
+      `https://food.legacyrules.com/wp-json/wc/v3/products/${params.id}`
     );
 
-    return { products };
+    return { product };
   },
 };
 </script>
